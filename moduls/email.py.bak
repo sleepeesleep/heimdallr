@@ -1,0 +1,35 @@
+import smtplib
+import configparser
+import re
+config = configparser.ConfigParser()
+config.read("/root/heimdallr/setting.ini")
+
+
+class Email():
+    def sendMessage(self, body):
+        gmail_user = config['email']['gmail_user']
+        gmail_password = config['email']['gmail_password']
+        to_sends = re.split(r',', config['email']['to'])
+        sent_from = gmail_user
+        to = []
+        for to_se in to_sends:
+                to.append(str(to_se))
+        subject = 'Notification'
+
+        email_text = """\
+        From: %s
+        To: %s
+        Subject: %s
+
+        %s
+        """ % (sent_from, ", ".join(to), subject, body)
+        try:
+            server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+            server.ehlo()
+            server.login(gmail_user, gmail_password)
+            server.sendmail(sent_from, to, email_text)
+            server.close()
+
+            print ('Email sent!')
+        except:
+            print ('Something went wrong...')
