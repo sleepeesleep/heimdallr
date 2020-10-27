@@ -12,6 +12,7 @@ config.read("/root/heimdallr/setting.ini")
 class Dump():
     def check(self, directory):
         files = os.listdir(directory)
+        hostname = directory = config['main']['hostname']
         list_names = []
         for file in files:
             name = re.findall(r'dump\-\d+\-\d+\-\d+T\d+:\d+:\d+', str(file))
@@ -23,8 +24,8 @@ class Dump():
         a = str(result.group(0))
         timestamp_last_file = time.mktime(datetime.datetime.strptime(a, "%Y-%m-%dT%H:%M:%S").timetuple())
         if (time.time() - timestamp_last_file) > int(config['dump']['time_for_alerting_dump']):
-            Telegram().sendMessage("Last dump file in %s ALARM" % (a))
-            Email().sendMessage("Last dump file in %s ALARM" % (a))
+            Telegram().sendMessage("Last dump file in %s ALARM hostname: %s" % (a,hostname))
+            Email().sendMessage("Last dump file in %s ALARM hostname: %s" % (a,hostname))
             return "Last dump file in %s this ALARM" % (a)
         else:
             return "Last dump file in %s this OK" % (a)
