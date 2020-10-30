@@ -18,6 +18,6 @@ class Email():
         for recipient in to:
             smtp_server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
             smtp_server.login(gmail_user, gmail_password)
-            message = "Subject: {}\n\n{}".format(subject, body)
+            message = "Subject: %s\n\n%s" % (subject, body)
             smtp_server.sendmail(sender, recipient, message)
             smtp_server.close()

@@ -12,7 +12,7 @@ config.read("/root/heimdallr/setting.ini")
 class Delta():
     def check(self, directory):
         files = os.listdir(directory)
-        hostname = directory = config['main']['hostname']
+        hostname = config['main']['hostname']
         list_names = []
         for file in files:
             name = re.findall(r'delta\-\d+\-\d+\-\d+T\d+:\d+:\d+', str(file))
