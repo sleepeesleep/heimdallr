@@ -1,23 +1,13 @@
 import smtplib
 import configparser
 import re
+import os
+
 config = configparser.ConfigParser()
 config.read("/root/heimdallr/setting.ini")
 
 
 class Email():
     def sendMessage(self, body):
-        gmail_user = config['email']['gmail_user']
-        gmail_password = config['email']['gmail_password']
-        to_sends = re.split(r',', config['email']['to'])
-        sender = gmail_user
-        subject = "Alarm"
-        to = []
-        for to_se in to_sends:
-                to.append(str(to_se))
-        for recipient in to:
-            smtp_server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
-            smtp_server.login(gmail_user, gmail_password)
-            message = "Subject: %s\n\n%s" % (subject, body)
-            smtp_server.sendmail(sender, recipient, message)
-            smtp_server.close()
+        to_sends = config['email']['to']
+        os.system("echo \"%s\" | mail -s \"Alarm\" %s " % (body, to_sends))
